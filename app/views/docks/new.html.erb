@@ -1,0 +1,36 @@
+<% if user_signed_in? %>
+
+<div>
+<div style="text-align: center; padding-top: 70px;">
+  <h1>Upload Files</h1>
+</div>
+
+<div style="text-align: center;">
+  <i style="font-size: 200px;" class="fa-solid fa-cloud-arrow-down"></i>
+</div>
+
+  <div class="file-upload-wrapper">
+  <%= render "form", dock: @dock %>
+  </div>
+  <div>
+    <%= link_to "Back to Files", docks_path, class: "btn btn-outline-info" %>
+  </div>
+</div>
+<% else %>
+
+
+<div style="text-align: center; padding-top: 120px;">
+    <i style="font-size: 200px;" class="fa-solid fa-cloud-arrow-down"></i>
+</div>
+
+
+
+<figure class="text-center">
+    <blockquote class="blockquote">
+                <h1 class="card-title"><strong>My DropBox</strong></h1><br/>
+                <%= link_to "Sign Up", new_user_registration_path, class:"btn btn-outline-info" %>
+                <%= link_to "Login", new_user_session_path, class:"btn btn-outline-info" %>    
+    </blockquote>
+</figure> 
+
+<% end %>

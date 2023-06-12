@@ -1,0 +1,32 @@
+<p style="color: green"><%= notice %></p>
+
+<div class="row">
+<% @docks.each do |dock| %>
+  <% if dock.user_id == current_user.id %>
+  <% @total_file += 1 %>
+  <div class="col-sm-3">
+    <div class="card bg-dark text-info" style="border-radius: 1rem;">
+    <h5 class="card-header text-info text-center">Uploaded at: <%= dock.created_at %></h5>
+      <div class="card-body">
+        <div class="d-flex justify-content-center align-items-center">
+          <i class="fa-regular fa-circle-down fa-2x" style="color: info;"></i>
+        </div>
+        <h5 class="card-title text-info text-center"><%= render dock %></h5>
+        <div class="text-center">
+          <%= link_to "Show File", dock, class: "btn btn-outline-info" %>
+        </div>
+      </div>
+    </div>
+    <br/>
+  </div>
+  <% end %>
+<% end %>
+
+<% if @total_file == 0 %>
+  <div style="text-align: center; font-size: 100px; padding-top: 40px;">
+  <%= link_to new_dock_path, class: "your-link-class" do %><i class="fa-solid fa-file-circle-plus"></i><% end %>
+
+  </div>
+<% end %>
+
+</div>

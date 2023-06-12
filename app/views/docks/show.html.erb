@@ -1,0 +1,104 @@
+<body>
+  <p style="color: green"><%= notice %></p>
+  <div class="text-center">
+    <% if @dock.files.attached? %>
+      <% @dock.files.each do |file| %>
+        <div class="row">
+          <% if file.content_type.start_with?('image/') %>
+            <div>
+              <i class="fa-regular fa-images" style="font-size: 80px;"></i>
+            </div>
+            <div style="padding-top: 20px;">
+              <%= link_to image_tag(file, width: 200, height: 200), rails_blob_path(file, disposition: "attachment"), download: file.filename %>
+            </div>
+
+          <% elsif  file.content_type.start_with?('application/pdf')%>
+            <div>
+              <i class="fa-regular fa-file-pdf" style="font-size: 80px;"></i>
+            </div>
+            <div style="padding-top: 20px;">
+              <iframe src="<%= rails_blob_path(file, disposition: "inline") %>" style="width: 100%; height: 500px;"></iframe>
+            </div>
+
+          <% elsif file.content_type.start_with?('text/csv') || file.content_type.start_with?('text/xlxs') %>
+            <div>
+              <i class="fa-solid fa-file-csv" style="font-size: 80px;"></i>
+            </div>
+            <div style="padding-top: 20px;">
+              <%= link_to file.filename, rails_blob_path(file, disposition: "attachment"), class: "btn btn-primary", download: file.filename %>
+            </div>
+            <div style="padding-top: 20px;">
+              <table class="table table-striped">
+                <thead>
+                  <% CSV.parse(file.download, headers: true).headers.each do |header| %>
+                    <th><%= header %></th>
+                  <% end %>
+                </thead>
+                <tbody>
+                  <% CSV.parse(file.download, headers: true).each do |row| %>
+                    <tr>
+                      <% row.each do |column| %>
+                        <td><%= column[1] %></td>
+                      <% end %>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          <% elsif file.content_type.start_with?('video/') %>
+            <div>
+              <video width="400" controls>
+                <source src="<%= url_for(file) %>" type="<%= file.content_type %>">
+                Your browser does not support HTML5 video.
+              </video>
+            </div>
+            <div style="padding-top: 20px;">
+              <%= link_to file.filename, rails_blob_path(file, disposition: "attachment"), class: "btn btn-primary", download: file.filename %>
+            </div>
+
+
+            <% elsif file.content_type.start_with?('text/plain') %>
+            <div>
+              <i class="fa-solid fa-file-alt" style="font-size: 80px;"></i>
+            </div>
+            <div style="padding-top: 20px;">
+              <pre><%= file.download.force_encoding('UTF-8') %></pre>
+            </div>
+            <div style="padding-top: 20px;">
+              <%= link_to "Download", rails_blob_path(file, disposition: "attachment"), class: "btn btn-primary", download: file.filename %>
+            </div>
+
+            <% elsif file.content_type.start_with?('audio/') %>
+            <div style="padding-bottom: 30px;">
+              <i class="fa-solid fa-headphones" style="font-size: 80px;"></i>
+            </div>
+
+            <div>
+              <audio controls>
+                <source src="<%= rails_blob_path(file, disposition: 'attachment') %>" type="<%= file.content_type %>">
+                Your browser does not support the audio element.
+              </audio>
+            </div>
+            <div style="padding-top: 20px;">
+              <%= link_to file.filename, rails_blob_path(file, disposition: 'attachment'), class: 'btn btn-primary', download: file.filename %>
+            </div>
+
+            <% else %>
+            <div>
+              <i class="fa-solid fa-file-alt" style="font-size: 80px;"></i>
+            </div>
+            <div style="padding-top: 20px;">
+              <%= link_to file.filename, rails_blob_path(file, disposition: "attachment"), class: "btn btn-primary", download: file.filename %>
+            </div>
+          <% end %>
+
+        </div>
+      <% end %>
+    <% end %>
+
+    <div class="d-flex justify-content-center pt-5">
+      <%= link_to "Back to Files", docks_path, class: "btn btn-primary mr-2" %>
+      <%= button_to "Destroy File", @dock, method: :delete, class: "btn btn-danger pl-5", data: { confirm: "Are you sure?" } %>
+    </div>
+  </div>
+</body>

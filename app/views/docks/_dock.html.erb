@@ -1,0 +1,7 @@
+<% if dock.files.attached? %>
+  <% dock.files.each do |file| %>
+    <div class="row">
+    <%= link_to file.filename, url_for(file), target: "_blank" %>
+    </div>
+  <% end %>
+<% end %>

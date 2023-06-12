@@ -1,0 +1,19 @@
+<% if dock.files.attached? %>
+  <% dock.files.each do |file| %>
+    <div class="row">
+      <% if file.image? %>
+        <%= image_tag(file) %>
+      <% elsif file.video? %>
+        <%= video_tag(file, controls: true) %>
+      <% elsif file.audio? %>
+        <%= audio_tag(file, controls: true) %>
+      <% elsif file.blob.content_type == "application/pdf" %>
+        <%= link_to file.filename, url_for(file), target: "_blank" %>
+      <% elsif file.blob.content_type == "text/csv" %>
+        <%= file.filename %> (CSV file)
+      <% else %>
+        <%= link_to file.filename, url_for(file), target: "_blank" %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
